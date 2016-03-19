@@ -82,7 +82,7 @@ $(function() {
     s = s.slice(0, -1);
     console.log(s);
     $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=name,location_1_address,count(*)&$group=name,location_1_address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
-      var no_lower = $('#features input:checked').length;
+      var no_lower = $('#features li:visible').length;
       var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
       $.each(data, function(i,v) {
