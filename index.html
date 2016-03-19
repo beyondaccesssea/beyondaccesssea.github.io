@@ -43,6 +43,8 @@ $(function() {
     //$('#map').height($(window).height()-$('#bottom').height());
   });
   $('body').on('click', '#features li', function() { 
+    
+    console.log('clicked feature')
     s = '';
     $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).attr('data-value'), function(data) {
       var addresses = [];
