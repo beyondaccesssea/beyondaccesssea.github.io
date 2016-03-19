@@ -43,7 +43,7 @@ $(function() {
     //$('#map').height($(window).height()-$('#bottom').height());
   });
   $('body').on('click', '#features li', function() { 
-    
+    $(this).addClass('selected');
     console.log('clicked feature')
     s = '';
     $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).attr('data-value'), function(data) {
@@ -82,7 +82,7 @@ $(function() {
     s = s.slice(0, -1);
     console.log(s);
     $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=name,location_1_address,count(*)&$group=name,location_1_address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
-      var no_lower = $('#features li:visible').length;
+      var no_lower = $('#features .selected').length;
       var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
       $.each(data, function(i,v) {
@@ -124,6 +124,9 @@ $(function() {
         overflow-y:auto;
       }
       li {width:100%; padding:5px;}
+      .selected {
+        background:orange;
+      }
     </style>
 <div id="map"></div>
 <ul id="features">
