@@ -57,7 +57,7 @@ $(function() {
         s += "'"+address+"',";
       });
       s = s.slice(0, -1);
-      s = encodeURIComponent(s)
+      s = encodeURIComponent(s);
       var url = 'https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$where=location_1_address in('+s+')';
       console.log(url);
       var data2 = JSON.parse($.ajax({
