@@ -42,7 +42,7 @@ $(function() {
     });
     //$('#map').height($(window).height()-$('#bottom').height());
   });
-  $('body').on('click', '#features input', function() { 
+  $('body').on('click', '#features li', function() { 
     s = '';
     $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).attr('data-value'), function(data) {
       var addresses = [];
