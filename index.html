@@ -37,7 +37,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: Your browser doesn\'t support geolocation.');
 }
 $(function() {
-  $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
+  $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
       $('#features').append('<li data-value="'+v['feature_desc']+'">'+v['feature_desc']+'</li>');
     });
@@ -47,7 +47,7 @@ $(function() {
     $(this).addClass('selected');
     console.log('clicked feature')
     s = '';
-    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).attr('data-value'), function(data) {
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?feature_desc='+$(this).attr('data-value'), function(data) {
       var addresses = [];
       $.each(data, function(i,v){
         addresses.push(v['location_1_address']);
@@ -58,7 +58,7 @@ $(function() {
       });
       s = s.slice(0, -1);
       s = encodeURIComponent(s);
-      var url = 'https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$where=location_1_address in('+s+')';
+      var url = 'https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$where=location_1_address in('+s+')';
       console.log(url);
       var data2 = JSON.parse($.ajax({
           type: "GET",
@@ -82,7 +82,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=name,location_1_address,count(*)&$group=name,location_1_address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=name,location_1_address,count(*)&$group=name,location_1_address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
       var no_lower = $('#features .selected').length;
       console.log('NO LOWER ',no_lower)
       var geocoder = new google.maps.Geocoder();
