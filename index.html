@@ -76,7 +76,7 @@ $(function() {
         }
       });
     });
-    $('#features li:visible').each(function() {
+    $('#features .selected').each(function() {
       s += "'"+$(this).attr('data-value')+"',";
     });
     s = s.slice(0, -1);
