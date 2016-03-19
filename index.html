@@ -38,7 +38,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 $(function() {
   $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
-      $('#features').append(' <span><input type="checkbox" value="'+v['feature_desc']+'" /> '+v['feature_desc']+'</span>');
+      $('#features').append('<li value="'+v['feature_desc']+'" />'+v['feature_desc']+'</li>');
     });
     //$('#map').height($(window).height()-$('#bottom').height());
   });
@@ -66,10 +66,10 @@ $(function() {
       $.each(data2, function(i, v){
         featuresToShow.push(v['feature_desc']);
       });
-      $('#features span').hide();
-      $('#features input').each(function(){
+      $('#features li').hide();
+      $('#features li').each(function(){
         if (featuresToShow.indexOf($(this).val()) > -1) {
-          $(this).parent().show();
+          $(this).show();
         }
       });
     });
@@ -120,10 +120,11 @@ $(function() {
         height: 30%;
         overflow-y:auto;
       }
+      li {width:100%; padding:5px;}
     </style>
 <div id="map"></div>
-<div id="features">
-</div>
+<ul id="features">
+</ul>
 <ul id="results">
 
 </ul>
