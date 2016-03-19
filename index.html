@@ -50,7 +50,7 @@ $(function() {
     $.get('https://data.seattle.gov/resource/ye65-jqxk.json?feature_desc='+$(this).attr('data-value'), function(data) {
       var addresses = [];
       $.each(data, function(i,v){
-        addresses.push(v['location_1_address']);
+        addresses.push(v['name']);
       });
       s = '';
       $.each(addresses, function(i, address){
@@ -58,7 +58,7 @@ $(function() {
       });
       s = s.slice(0, -1);
       s = encodeURIComponent(s);
-      var url = 'https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$where=location_1_address in('+s+')';
+      var url = 'https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$where=name in('+s+')';
       console.log(url);
       var data2 = JSON.parse($.ajax({
           type: "GET",
@@ -82,7 +82,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=name,location_1_address,count(*)&$group=name,location_1_address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=name,name,count(*)&$group=name,name&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
       var no_lower = $('#features .selected').length;
       console.log('NO LOWER ',no_lower)
       var geocoder = new google.maps.Geocoder();
@@ -95,7 +95,7 @@ $(function() {
         $('#results').append('<li>'+v['name']+'</li>');
         if (false) {
         setTimeout(function(){
-          geocoder.geocode({'address': v['location_1_address']}, function(results, status) {
+          geocoder.geocode({'address': v['name']}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
               
               var marker = new google.maps.Marker({
