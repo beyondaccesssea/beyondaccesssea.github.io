@@ -40,7 +40,7 @@ $(function() {
     $.each(data, function(i, v) {
       $('#features').append(' <span><input type="checkbox" value="'+v['feature_desc']+'" /> '+v['feature_desc']+'</span>');
     });
-    $('#map').height($(window).height()-$('#bottom').height());
+    //$('#map').height($(window).height()-$('#bottom').height());
   });
   $('body').on('click', '#features input', function() { 
     s = '';
