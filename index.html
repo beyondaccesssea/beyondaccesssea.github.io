@@ -78,7 +78,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=common_name,address,count(*)&$group=common_name,address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
+    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=name,location_1_address,count(*)&$group=name,location_1_address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
       var no_lower = $('#features input:checked').length;
       var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
@@ -86,9 +86,9 @@ $(function() {
         if (parseInt(v['count']) != no_lower) {
           return false;
         } 
-        $('#results').append('<li>'+v['common_name']+'</li>');
+        $('#results').append('<li>'+v['name']+'</li>');
         setTimeout(function(){
-          geocoder.geocode({'address': v['address']}, function(results, status) {
+          geocoder.geocode({'address': v['location_1_address']}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
               
               var marker = new google.maps.Marker({
