@@ -92,7 +92,7 @@ $(function() {
         if (parseInt(v['count']) >= no_lower) {
           
         
-          $('#results').append('<li>'+v['name']+' '+v['distance']+'</li>');
+          $('#results').append('<li>'+v['name']+' '+parseFloat(v['distance'])*0.000621371+'</li>');
           if (false) {
           var marker = new google.maps.Marker({
                   map: window.map,
