@@ -47,7 +47,7 @@ $(function() {
     $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).val(), function(data) {
       var addresses = [];
       $.each(data, function(i,v){
-        addresses.push(v['address']);
+        addresses.push(v['location_1_address']);
       });
       s = '';
       $.each(addresses, function(i, address){
@@ -55,7 +55,7 @@ $(function() {
       });
       s = s.slice(0, -1);
       s = encodeURIComponent(s)
-      var url = 'https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$where=address in('+s+')';
+      var url = 'https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$where=location_1_address in('+s+')';
       console.log(url);
       var data2 = JSON.parse($.ajax({
           type: "GET",
