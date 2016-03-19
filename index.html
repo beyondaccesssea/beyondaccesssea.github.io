@@ -54,6 +54,7 @@ $(function() {
       });
       s = s.slice(0, -1);
       var url = 'https://data.seattle.gov/resource/3c4b-gdxv.json?$select=city_feature&$group=city_feature&$where=address in('+s+')';
+      console.log(url);
       var data2 = JSON.parse($.ajax({
           type: "GET",
           url: url,
