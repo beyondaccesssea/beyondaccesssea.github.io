@@ -89,7 +89,7 @@ $(function() {
       $('#results').html(''); //clear
       $.each(data, function(i,v) {
         console.log('count ',v['count'])
-        if (parseInt(v['count']) != no_lower) {
+        if (parseInt(v['count']) < no_lower) {
           return false;
         } 
         $('#results').append('<li>'+v['name']+'</li>');
