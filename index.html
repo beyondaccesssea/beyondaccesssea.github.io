@@ -38,13 +38,13 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 $(function() {
   $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
-      $('#features').append('<li value="'+v['feature_desc']+'" />'+v['feature_desc']+'</li>');
+      $('#features').append('<li data-value="'+v['feature_desc']+'">'+v['feature_desc']+'</li>');
     });
     //$('#map').height($(window).height()-$('#bottom').height());
   });
   $('body').on('click', '#features input', function() { 
     s = '';
-    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).val(), function(data) {
+    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).attr('data-value'), function(data) {
       var addresses = [];
       $.each(data, function(i,v){
         addresses.push(v['location_1_address']);
@@ -68,13 +68,13 @@ $(function() {
       });
       $('#features li').hide();
       $('#features li').each(function(){
-        if (featuresToShow.indexOf($(this).val()) > -1) {
+        if (featuresToShow.indexOf($(this).attr('data-value')) > -1) {
           $(this).show();
         }
       });
     });
     $('#features input:checked').each(function() {
-      s += "'"+$(this).val()+"',";
+      s += "'"+$(this).attr('data-value')+"',";
     });
     s = s.slice(0, -1);
     console.log(s);
