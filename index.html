@@ -43,6 +43,33 @@ $(function() {
   });
   $('body').on('click', '#features input', function() {
     s = '';
+    $.get('https://data.seattle.gov/resource/3c4b-gdxv.json?city_feature='+$(this).val(), function(data) {
+      var addresses = [];
+      $.each(data, function(i,v){
+        addresses.push(v['address']);
+      });
+      s = '';
+      $.each(addresses, function(i, address){
+        s += "'"+address+"',";
+      });
+      s = s.slice(0, -1);
+      var url = 'https://data.seattle.gov/resource/3c4b-gdxv.json?$select=city_feature&$group=city_feature&$where=address in('+s+')';
+      var data2 = JSON.parse($.ajax({
+          type: "GET",
+          url: url,
+          async: false
+      }).responseText);
+      featuresToShow = [];
+      $.each(data2, function(i, v){
+        featuresToShow.push(v['city_feature']);
+      });
+      $('#features input').hide();
+      $('#features input').each(function(){
+        if (featuresToShow.indexOf($(this).val()) > -1) {
+          $(this).show();
+        }
+      });
+    });
     $('#features input:checked').each(function() {
       s += "'"+$(this).val()+"',";
     });
