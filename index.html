@@ -36,7 +36,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: Your browser doesn\'t support geolocation.');
 }
 $(function() {
-  $.get('https://data.seattle.gov/resource/3c4b-gdxv.json?$select=city_feature&$group=city_feature&$order=count(*)%20DESC', function(data) {
+  $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
       $('#features').append(' <span><input type="checkbox" value="'+v['city_feature']+'" /> '+v['city_feature']+'</span>');
     });
@@ -44,7 +44,7 @@ $(function() {
   });
   $('body').on('click', '#features input', function() {
     s = '';
-    $.get('https://data.seattle.gov/resource/3c4b-gdxv.json?city_feature='+$(this).val(), function(data) {
+    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?feature_desc='+$(this).val(), function(data) {
       var addresses = [];
       $.each(data, function(i,v){
         addresses.push(v['address']);
@@ -55,7 +55,7 @@ $(function() {
       });
       s = s.slice(0, -1);
       s = encodeURIComponent(s)
-      var url = 'https://data.seattle.gov/resource/3c4b-gdxv.json?$select=city_feature&$group=city_feature&$where=address in('+s+')';
+      var url = 'https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$where=address in('+s+')';
       console.log(url);
       var data2 = JSON.parse($.ajax({
           type: "GET",
@@ -78,7 +78,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/3c4b-gdxv.json?$select=common_name,address,count(*)&$group=common_name,address&$where=city_feature in('+s+')&$order=count(*)%20DESC', function(data) {
+    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=common_name,address,count(*)&$group=common_name,address&$where=city_feature in('+s+')&$order=count(*)%20DESC', function(data) {
       var no_lower = $('#features input:checked').length;
       var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
