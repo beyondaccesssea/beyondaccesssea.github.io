@@ -6,6 +6,7 @@ function initMap() {
     center: {lat: -34.397, lng: 150.644},
     zoom: 17
   });
+  window.map = map;
   var infoWindow = new google.maps.InfoWindow({map: map});
 
   // Try HTML5 geolocation.
@@ -79,12 +80,25 @@ $(function() {
     console.log(s);
     $.get('https://data.seattle.gov/resource/3c4b-gdxv.json?$select=common_name,address,count(*)&$group=common_name,address&$where=city_feature in('+s+')&$order=count(*)%20DESC', function(data) {
       var no_lower = $('#features input:checked').length;
+      var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
       $.each(data, function(i,v) {
         if (parseInt(v['count']) != no_lower) {
           return false;
         } 
         $('#results').append('<li>'+v['common_name']+'</li>');
+        geocoder.geocode({'address': v['address']}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            
+            var marker = new google.maps.Marker({
+              map: window.map,
+              position: results[0].geometry.location
+            });
+            console.log(results[0].geometry.location);
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
       });
       
     });
