@@ -40,7 +40,7 @@ $(function() {
   $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
       console.log(v['feature_desc'].indexOf('ADA'));
-      if (v['feature_desc'].indexOf('ADA') > -1) {
+      if (v['feature_desc'].indexOf('ADA') > -1 || v['feature_desc'].indexOf('Pesticide') > -1 || v['feature_desc'].indexOf('Play') > -1 || v['feature_desc'].indexOf('Rest') > -1) {
         $('#features').append('<li data-value="'+v['feature_desc']+'">'+v['feature_desc']+'</li>');
       }
     });
