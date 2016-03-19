@@ -39,7 +39,7 @@ $(function() {
     $.each(data, function(i, v) {
       $('#features').append(' <input type="checkbox" value="'+v['city_feature']+'" /> '+v['city_feature']);
     });
-    
+    $('#map').height($(window).height()-$('#features').height());
   });
   $('body').on('click', '#features input', function() {
     s = '';
