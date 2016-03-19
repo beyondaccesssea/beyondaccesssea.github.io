@@ -37,7 +37,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 $(function() {
   $.get('https://data.seattle.gov/resource/3c4b-gdxv.json?$select=city_feature&$group=city_feature&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
-      $('#features').append(' <input type="checkbox" value="'+v['city_feature']+'" /> '+v['city_feature']);
+      $('#features').append(' <span><input type="checkbox" value="'+v['city_feature']+'" /> '+v['city_feature']+'</span>');
     });
     $('#map').height($(window).height()-$('#bottom').height());
   });
@@ -63,10 +63,10 @@ $(function() {
       $.each(data2, function(i, v){
         featuresToShow.push(v['city_feature']);
       });
-      $('#features input').hide();
+      $('#features span').hide();
       $('#features input').each(function(){
         if (featuresToShow.indexOf($(this).val()) > -1) {
-          $(this).show();
+          $(this).parent().show();
         }
       });
     });
