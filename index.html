@@ -101,9 +101,7 @@ $(function() {
                 position: results[0].geometry.location
               });
               console.log(JSON.stringify(results[0].geometry.location));
-            } else {
-              alert('Geocode was not successful for the following reason: ' + status);
-            }
+            } 
           });
         },i*500); // trying to deal with geocoding limit
       });
