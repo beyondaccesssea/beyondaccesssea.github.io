@@ -64,7 +64,7 @@ $(function() {
       }).responseText);
       featuresToShow = [];
       $.each(data2, function(i, v){
-        featuresToShow.push(v['city_feature']);
+        featuresToShow.push(v['feature_desc']);
       });
       $('#features span').hide();
       $('#features input').each(function(){
@@ -78,7 +78,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=common_name,address,count(*)&$group=common_name,address&$where=city_feature in('+s+')&$order=count(*)%20DESC', function(data) {
+    $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=common_name,address,count(*)&$group=common_name,address&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
       var no_lower = $('#features input:checked').length;
       var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
