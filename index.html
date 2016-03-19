@@ -69,11 +69,11 @@ $(function() {
         featuresToShow.push(v['feature_desc']);
       });
       $('#features li').hide();
-      $('#features li').each(function(){
-        if (featuresToShow.indexOf($(this).attr('data-value')) > -1) {
-          $(this).show();
-        }
-      });
+      //$('#features li').each(function(){
+      //  if (featuresToShow.indexOf($(this).attr('data-value')) > -1) {
+      //    $(this).show();
+      //  }
+      //});
     });
     $('#features input:checked').each(function() {
       s += "'"+$(this).attr('data-value')+"',";
