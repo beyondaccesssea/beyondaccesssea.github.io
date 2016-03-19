@@ -87,7 +87,7 @@ $(function() {
           return false;
         } 
         $('#results').append('<li>'+v['common_name']+'</li>');
-        geocoder.geocode({'address': v['address']}, function(results, status) {
+        setTimeout(function(){geocoder.geocode({'address': v['address']}, function(results, status) {
           if (status === google.maps.GeocoderStatus.OK) {
             
             var marker = new google.maps.Marker({
@@ -98,7 +98,8 @@ $(function() {
           } else {
             alert('Geocode was not successful for the following reason: ' + status);
           }
-        });
+        //});
+        },i*200);
       });
       
     });
