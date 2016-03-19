@@ -92,20 +92,12 @@ $(function() {
         if (parseInt(v['count']) < no_lower) {
           return false;
         } 
-        $('#results').append('<li>'+v['pmaid']+'</li>');
+        $('#results').append('<li>'+v['name']+'</li>');
         if (false) {
-        setTimeout(function(){
-          geocoder.geocode({'address': v['pmaid']}, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-              
-              var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
                 map: window.map,
                 position: results[0].geometry.location
               });
-              console.log(JSON.stringify(results[0].geometry.location));
-            } 
-          });
-        },i*500); // trying to deal with geocoding limit
         }
       });
       
