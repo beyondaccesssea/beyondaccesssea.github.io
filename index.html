@@ -36,7 +36,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: Your browser doesn\'t support geolocation.');
 }
 $(function() {
-  $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
+  $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$where=feature_desc like \'%ADA%\'&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
       $('#features').append('<li data-value="'+v['feature_desc']+'">'+v['feature_desc']+'</li>');
     });
