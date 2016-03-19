@@ -82,22 +82,23 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,name,count(*)&$group=pmaid,name,location&$where=feature_desc in('+s+')&$order=distance_in_meters(location, \'POINT ('+window.pos['lat']+' '+window.pos['lng']+')\')', function(data) {
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,name,count(*),distance_in_meters(location, \'POINT ('+window.pos['lat']+' '+window.pos['lng']+')\')&$group=pmaid,name,location&$where=feature_desc in('+s+')&$order=distance_in_meters(location, \'POINT ('+window.pos['lat']+' '+window.pos['lng']+')\')', function(data) {
       var no_lower = $('#features .selected').length;
       console.log('NO LOWER ',no_lower)
       var geocoder = new google.maps.Geocoder();
       $('#results').html(''); //clear
       $.each(data, function(i,v) {
         console.log('count ',v['count'])
-        if (parseInt(v['count']) < no_lower) {
-          return false;
-        } 
-        $('#results').append('<li>'+v['name']+'</li>');
-        if (false) {
-        var marker = new google.maps.Marker({
-                map: window.map,
-                position: results[0].geometry.location
-              });
+        if (parseInt(v['count']) >= no_lower) {
+          
+        
+          $('#results').append('<li>'+v['name']+'</li>');
+          if (false) {
+          var marker = new google.maps.Marker({
+                  map: window.map,
+                  position: results[0].geometry.location
+                });
+          }
         }
       });
       
