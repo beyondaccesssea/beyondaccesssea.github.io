@@ -38,7 +38,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 $(function() {
   $.get('https://data.seattle.gov/resource/64yg-jvpt.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
     $.each(data, function(i, v) {
-      $('#features').append(' <span><input type="checkbox" value="'+v['city_feature']+'" /> '+v['city_feature']+'</span>');
+      $('#features').append(' <span><input type="checkbox" value="'+v['feature_desc']+'" /> '+v['feature_desc']+'</span>');
     });
     $('#map').height($(window).height()-$('#bottom').height());
   });
