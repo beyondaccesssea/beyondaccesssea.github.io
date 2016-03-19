@@ -39,7 +39,7 @@ $(function() {
     $.each(data, function(i, v) {
       $('#features').append(' <input type="checkbox" value="'+v['city_feature']+'" /> '+v['city_feature']);
     });
-    $('#map').height($(window).height()-$('#features').height());
+    $('#map').height($(window).height()-$('#bottom').height());
   });
   $('body').on('click', '#features input', function() {
     s = '';
@@ -76,8 +76,10 @@ $(function() {
       }
     </style>
 <div id="map"></div>
+<div id="bottom">
 <div id="features">
 </div>
 <ul id="results">
 
 </ul>
+</div>
