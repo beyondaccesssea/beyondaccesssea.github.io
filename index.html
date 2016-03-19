@@ -17,7 +17,7 @@ function initMap() {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-
+      window.pos = pos;
       infoWindow.setPosition(pos);
       infoWindow.setContent('Location found.');
       map.setCenter(pos);
@@ -82,7 +82,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,name,count(*)&$group=pmaid,name&$where=feature_desc in('+s+')&$order=count(*)%20DESC', function(data) {
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,name,count(*)&$group=pmaid,name&$where=feature_desc in('+s+')&$order=distance_in_meters(location, \'POINT ('+window.pos['lat']+' '+window.pos['lng']+')\')', function(data) {
       var no_lower = $('#features .selected').length;
       console.log('NO LOWER ',no_lower)
       var geocoder = new google.maps.Geocoder();
