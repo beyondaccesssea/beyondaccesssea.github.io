@@ -85,7 +85,7 @@ $(function() {
     });
     s = s.slice(0, -1);
     console.log(s);
-    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,name,count(*),distance_in_meters(location, \'POINT ('+window.pos['lng']+' '+window.pos['lat']+')\')%20as%20distance&$group=pmaid,name,location&$where=feature_desc in('+s+')&$order=distance_in_meters(location, \'POINT ('+window.pos['lng']+' '+window.pos['lat']+')\')', function(data) {
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,location,name,count(*),distance_in_meters(location, \'POINT ('+window.pos['lng']+' '+window.pos['lat']+')\')%20as%20distance&$group=pmaid,name,location&$where=feature_desc in('+s+')&$order=distance_in_meters(location, \'POINT ('+window.pos['lng']+' '+window.pos['lat']+')\')', function(data) {
       var no_lower = $('#features .selected').length;
       console.log('NO LOWER ',no_lower)
       var geocoder = new google.maps.Geocoder();
@@ -93,9 +93,15 @@ $(function() {
       $.each(data, function(i,v) {
         console.log('count ',v['count'])
         if (parseInt(v['count']) >= no_lower) {
+          p = v['location']['coordinates']
           
-        
-          $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+'</li>');
+          url = 'https://data.seattle.gov/resource/pu5n-trf4.json?$select=count(*) as count&$where=within_circle(incident_location, '+p[1]+', '+p[0]+', 500)';
+          var dispatches = JSON.parse($.ajax({
+              type: "GET",
+              url: url,
+              async: false
+          }).responseText)['count'];
+          $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and '+dispatches+' police dispatches</li>');
           if (false) {
           var marker = new google.maps.Marker({
                   map: window.map,
