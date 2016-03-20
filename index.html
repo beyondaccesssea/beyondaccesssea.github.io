@@ -100,7 +100,7 @@ $(function() {
               type: "GET",
               url: url,
               async: false
-          }).responseText)['count'];
+          }).responseText)[0]['count'];
           $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and '+dispatches+' police dispatches</li>');
           if (false) {
           var marker = new google.maps.Marker({
