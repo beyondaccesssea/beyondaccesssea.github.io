@@ -101,7 +101,7 @@ $(function() {
               url: url,
               async: false
           }).responseText)[0]['count'];
-          $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and '+dispatches+' police dispatches</li>');
+          $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and '+dispatches+' police dispatches (<a href="https://maps.google.com?q='+v['name']+', Seattle WA">link to directions</a>)</li>');
           if (false) {
           var marker = new google.maps.Marker({
                   map: window.map,
