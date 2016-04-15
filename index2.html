@@ -110,7 +110,7 @@ $(function() {
         if (parseInt(v['count']) >= no_lower) {
           p = v['location']['coordinates']
           
-          url = 'https://data.seattle.gov/resource/pu5n-trf4.json?$select=\''+pmaid+'\' as pmaid,count(*) as count&$where=within_circle(incident_location, '+p[1]+', '+p[0]+', 500)';
+          url = 'https://data.seattle.gov/resource/pu5n-trf4.json?$select=\''+v['pmaid']+'\' as pmaid,count(*) as count&$where=within_circle(incident_location, '+p[1]+', '+p[0]+', 500)';
           //var dispatches = JSON.parse($.ajax({
           //    type: "GET",
           //    url: url,
