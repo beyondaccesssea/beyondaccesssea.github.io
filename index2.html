@@ -47,7 +47,11 @@ $(function() {
     //$('#map').height($(window).height()-$('#bottom').height());
   });
   $('body').on('click', '#features li', function() { 
-    $(this).addClass('selected');
+    if ($(this).hasClass('selected')) {
+      $(this).removeClass('selected');
+    } else {
+      $(this).addClass('selected');
+    }
     console.log('clicked feature')
     s = '';
     var selected = [];
