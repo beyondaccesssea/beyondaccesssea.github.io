@@ -55,6 +55,10 @@ $(function() {
     console.log('clicked feature')
     s = '';
     var selected = [];
+    if (selected.length = 0) {
+      $('#results').html('');
+      return;
+    }
     $('.selected').each(function(item) {
       selected.push($(this).attr('data-value'));
     });
@@ -106,13 +110,17 @@ $(function() {
         if (parseInt(v['count']) >= no_lower) {
           p = v['location']['coordinates']
           
-          url = 'https://data.seattle.gov/resource/pu5n-trf4.json?$select=count(*) as count&$where=within_circle(incident_location, '+p[1]+', '+p[0]+', 500)';
-          var dispatches = JSON.parse($.ajax({
-              type: "GET",
-              url: url,
-              async: false
-          }).responseText)[0]['count'];
-          $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and '+dispatches+' police dispatches (<a href="https://maps.google.com?q='+v['name']+', Seattle WA">link to directions</a>)</li>');
+          url = 'https://data.seattle.gov/resource/pu5n-trf4.json?$select=\''+pmaid+'\' as pmaid,count(*) as count&$where=within_circle(incident_location, '+p[1]+', '+p[0]+', 500)';
+          //var dispatches = JSON.parse($.ajax({
+          //    type: "GET",
+          //    url: url,
+          //    async: false
+          //}).responseText)[0]['count'];
+          
+          $('#results').append('<li id="park_'+v['pmaid']+'">'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and <span class="dispatches"></span> police dispatches (<a href="https://maps.google.com?q='+v['name']+', Seattle WA">link to directions</a>)</li>');
+          $.get(url, function(data) {
+            $('#park_'+data[0]['pmaid']+' .dispatches').text(data[0]['count']);
+          });
           if (false) {
           var marker = new google.maps.Marker({
                   map: window.map,
@@ -148,7 +156,7 @@ $(function() {
       }
       li {width:100%; padding:5px;margin:0;list-style:none;}
       .selected {
-        background:orange;
+        background:green;
       }
     </style>
 <div id="map"></div>
