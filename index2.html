@@ -55,14 +55,14 @@ $(function() {
     console.log('clicked feature')
     s = '';
     var selected = [];
-    if (selected.length = 0) {
-      $('#results').html('');
-      return;
-    }
+    
     $('.selected').each(function(item) {
       selected.push($(this).attr('data-value'));
     });
-    selected = selected.join()
+    if (selected.length = 0) {
+      $('#results').html('');
+    }
+    selected = selected.join();
     n = selected.length;
     url = 'https://data.seattle.gov/resource/ye65-jqxk.json?$query=SELECT%20pmaid,feature_desc%20WHERE%20feature_desc%20in('+selected+')%20|%3E%20SELECT%20pmaid,count(*)%20as%20count%20GROUP%20BY%20pmaid%20|%3E%20SELECT%20pmaid%20WHERE%20count%20%3E=%20'+n
     $.get('https://data.seattle.gov/resource/ye65-jqxk.json?feature_desc='+$(this).attr('data-value'), function(data) {
