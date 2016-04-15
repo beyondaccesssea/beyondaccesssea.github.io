@@ -1,0 +1,155 @@
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<script>
+// AIzaSyA2NXaonfp6HwfPSxLxKPibYbVk3dtgh24
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 17
+  });
+  window.map = map;
+  var infoWindow = new google.maps.InfoWindow({map: map});
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      window.pos = pos;
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Location found.');
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+}
+$(function() {
+  $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$order=count(*)%20DESC', function(data) {
+    $.each(data, function(i, v) {
+      console.log(v['feature_desc'].indexOf('ADA'));
+      if (v['feature_desc'].indexOf('ADA') > -1 || v['feature_desc'].indexOf('Pesticide') > -1 || v['feature_desc'].indexOf('Play') > -1 || v['feature_desc'].indexOf('Rest') > -1) {
+        $('#features').append('<li data-value="'+v['feature_desc']+'">'+v['feature_desc']+'</li>');
+      }
+    });
+    //$('#map').height($(window).height()-$('#bottom').height());
+  });
+  $('body').on('click', '#features li', function() { 
+    $(this).addClass('selected');
+    console.log('clicked feature')
+    s = '';
+    var selected = [];
+    $('.selected').each(function(item) {
+      selected.push($(this).attr('data-value'));
+    });
+    selected = selected.join()
+    n = selected.length;
+    url = 'https://data.seattle.gov/resource/ye65-jqxk.json?$query=SELECT%20pmaid,feature_desc%20WHERE%20feature_desc%20in('+selected+')%20|%3E%20SELECT%20pmaid,count(*)%20as%20count%20GROUP%20BY%20pmaid%20|%3E%20SELECT%20pmaid%20WHERE%20count%20%3E=%20'+n
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?feature_desc='+$(this).attr('data-value'), function(data) {
+      var addresses = [];
+      $.each(data, function(i,v){
+        addresses.push(v['pmaid']);
+      });
+      s = '';
+      $.each(addresses, function(i, address){
+        s += "'"+address+"',";
+      });
+      s = s.slice(0, -1);
+      s = encodeURIComponent(s);
+      var url = 'https://data.seattle.gov/resource/ye65-jqxk.json?$select=feature_desc&$group=feature_desc&$where=pmaid in('+s+')';
+      console.log(url);
+      var data2 = JSON.parse($.ajax({
+          type: "GET",
+          url: url,
+          async: false
+      }).responseText);
+      featuresToShow = [];
+      $.each(data2, function(i, v){
+        featuresToShow.push(v['feature_desc']);
+      });
+      $('#features li').hide();
+      $('#features li').each(function(){
+        if (featuresToShow.indexOf($(this).attr('data-value')) > -1) {
+          //console.log($(this).attr('data-value'))
+          $(this).show();
+        }
+      });
+    });
+    $('#features .selected').each(function() {
+      s += "'"+$(this).attr('data-value')+"',";
+    });
+    s = s.slice(0, -1);
+    console.log(s);
+    $.get('https://data.seattle.gov/resource/ye65-jqxk.json?$select=pmaid,location,name,count(*),distance_in_meters(location, \'POINT ('+window.pos['lng']+' '+window.pos['lat']+')\')%20as%20distance&$group=pmaid,name,location&$where=feature_desc in('+s+')&$order=distance_in_meters(location, \'POINT ('+window.pos['lng']+' '+window.pos['lat']+')\')', function(data) {
+      var no_lower = $('#features .selected').length;
+      console.log('NO LOWER ',no_lower)
+      var geocoder = new google.maps.Geocoder();
+      $('#results').html(''); //clear
+      $.each(data, function(i,v) {
+        console.log('count ',v['count'])
+        if (parseInt(v['count']) >= no_lower) {
+          p = v['location']['coordinates']
+          
+          url = 'https://data.seattle.gov/resource/pu5n-trf4.json?$select=count(*) as count&$where=within_circle(incident_location, '+p[1]+', '+p[0]+', 500)';
+          var dispatches = JSON.parse($.ajax({
+              type: "GET",
+              url: url,
+              async: false
+          }).responseText)[0]['count'];
+          $('#results').append('<li>'+v['name']+' '+(parseFloat(v['distance'])*0.000621371).toFixed(2)+' miles away and '+dispatches+' police dispatches (<a href="https://maps.google.com?q='+v['name']+', Seattle WA">link to directions</a>)</li>');
+          if (false) {
+          var marker = new google.maps.Marker({
+                  map: window.map,
+                  position: results[0].geometry.location
+                });
+          }
+        }
+      });
+      
+    });
+  });  
+});
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2NXaonfp6HwfPSxLxKPibYbVk3dtgh24&callback=initMap">
+    </script>
+<style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-size:200%;
+      }
+      ul {
+        padding:0;
+      }
+      #map, #features, #results {
+        height: 30%;
+        overflow-y:auto;
+      }
+      #features {
+        border-bottom:1px solid blue;
+      }
+      li {width:100%; padding:5px;margin:0;list-style:none;}
+      .selected {
+        background:orange;
+      }
+    </style>
+<div id="map"></div>
+<ul id="features">
+</ul>
+<ul id="results">
+
+</ul>
